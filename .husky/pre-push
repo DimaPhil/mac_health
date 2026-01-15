@@ -1,0 +1,5 @@
+echo "Running tests with coverage check (80% threshold)..."
+npm run test:coverage
+
+echo "Running Rust tests..."
+cd src-tauri && cargo test
