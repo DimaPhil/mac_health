@@ -43,7 +43,7 @@ vi.mock("../../store/systemStore", () => ({
 }));
 
 // Mock window.confirm
-global.confirm = vi.fn().mockReturnValue(true);
+window.confirm = vi.fn().mockReturnValue(true);
 
 describe("MemoryDetail", () => {
   beforeEach(() => {
@@ -107,6 +107,6 @@ describe("MemoryDetail", () => {
     );
     fireEvent.click(forceQuitButtons[0]);
 
-    expect(global.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalled();
   });
 });
