@@ -75,6 +75,12 @@ vi.mock("@tauri-apps/api/window", () => ({
 describe("App", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mark setup as complete so we skip the wizard and show dashboard
+    localStorage.setItem("mac-health-setup-complete", "true");
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it("renders the app title in header", async () => {
