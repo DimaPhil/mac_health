@@ -109,7 +109,7 @@ fn update_tray_status(app: AppHandle, status: SystemStatus) -> Result<(), String
 mod tests {
     #[test]
     fn test_app_builds() {
-        // Basic test to ensure the app configuration is valid
-        assert!(true);
+        // Basic test to ensure the module compiles correctly
+        // The actual app setup is tested through integration tests
     }
 }
