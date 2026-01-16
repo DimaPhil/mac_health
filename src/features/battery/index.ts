@@ -1,0 +1,1 @@
+export { BatteryDetail } from "./BatteryDetail";

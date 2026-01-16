@@ -1,0 +1,1 @@
+export { CpuDetail } from "./CpuDetail";

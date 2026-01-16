@@ -14,21 +14,60 @@ A native macOS health monitoring application built with Tauri v2, React, TypeScr
 
 ```
 mac_health/
-├── src/                    # React frontend source
-│   ├── App.tsx            # Main React component
-│   ├── main.tsx           # React entry point
-│   ├── index.css          # Tailwind CSS imports
-│   └── test/              # Test setup files
-├── src-tauri/             # Tauri/Rust backend
+├── src/                          # React frontend source
+│   ├── App.tsx                   # Main app with view container
+│   ├── main.tsx                  # React entry point
+│   ├── index.css                 # Tailwind CSS + custom styles
+│   ├── types/                    # TypeScript interfaces
+│   │   └── index.ts              # RamInfo, CpuInfo, BatteryInfo, etc.
+│   ├── lib/                      # Utilities
+│   │   ├── tauri.ts              # Tauri command wrappers
+│   │   └── formatters.ts         # Byte/time formatters
+│   ├── store/                    # State management
+│   │   └── systemStore.ts        # Zustand store
+│   ├── hooks/                    # Custom hooks
+│   │   └── usePolling.ts         # Data polling hook
+│   ├── components/               # Shared components
+│   │   ├── charts/               # CircularProgress, BarChart
+│   │   └── ui/                   # StatusBadge, BackButton
+│   └── features/                 # Feature modules
+│       ├── dashboard/            # Dashboard + widgets
+│       ├── memory/               # Memory detail view
+│       ├── storage/              # Storage detail view
+│       ├── battery/              # Battery detail view
+│       └── cpu/                  # CPU detail view
+├── src-tauri/                    # Tauri/Rust backend
 │   ├── src/
-│   │   ├── lib.rs         # Rust library with Tauri commands
-│   │   └── main.rs        # Rust binary entry point
-│   ├── Cargo.toml         # Rust dependencies
-│   ├── tauri.conf.json    # Tauri configuration
-│   └── icons/             # App icons
-├── .github/workflows/     # CI configuration
-└── .husky/                # Git hooks
+│   │   ├── lib.rs                # App setup, tray, command registration
+│   │   ├── main.rs               # Binary entry point
+│   │   └── monitors/             # System monitor modules
+│   │       ├── mod.rs
+│   │       ├── ram.rs            # RAM info + processes
+│   │       ├── cpu.rs            # CPU info + processes
+│   │       ├── battery.rs        # Battery health
+│   │       └── disk.rs           # Disk info
+│   ├── Cargo.toml                # Rust dependencies
+│   └── tauri.conf.json           # Window + tray config
+├── .github/workflows/            # CI configuration
+└── .husky/                       # Git hooks
 ```
+
+## Architecture
+
+### Menu Bar Application
+- System tray icon in macOS menu bar
+- Click to show/hide popover window (380x520px)
+- Click outside to dismiss
+
+### Frontend (React + Zustand + Framer Motion)
+- Dashboard with 4 widget cards (RAM, Disk, Battery, CPU)
+- Detail views with slide animations
+- Real-time polling (3s interval)
+
+### Backend (Rust + Tauri v2)
+- `sysinfo` crate for RAM, CPU, disk metrics
+- `battery` crate for battery health
+- Tauri commands exposed to frontend
 
 ## Commands
 

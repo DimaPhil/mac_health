@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --popover-width: 380px;
+    --popover-height: 520px;
+  }
+
+  body {
+    @apply bg-surface text-white antialiased;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-elevated rounded-2xl p-4 border border-white/5;
+  }
+
+  .widget-card {
+    @apply card cursor-pointer transition-all duration-200 ease-out;
+    @apply hover:scale-[1.02] hover:bg-surface-hover;
+    @apply active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply px-3 py-1.5 rounded-lg text-sm font-medium;
+    @apply bg-white/10 hover:bg-white/20 active:bg-white/5;
+    @apply transition-colors duration-150;
+  }
+
+  .btn-back {
+    @apply p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10;
+    @apply transition-colors duration-150;
+  }
+
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .status-badge-excellent {
+    @apply status-badge bg-health-excellent/20 text-health-excellent;
+  }
+
+  .status-badge-warning {
+    @apply status-badge bg-health-warning/20 text-health-warning;
+  }
+
+  .status-badge-critical {
+    @apply status-badge bg-health-critical/20 text-health-critical;
+  }
+}

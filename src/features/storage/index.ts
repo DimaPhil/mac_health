@@ -1,0 +1,1 @@
+export { StorageDetail } from "./StorageDetail";
