@@ -74,8 +74,8 @@ pub fn get_battery_info() -> Result<BatteryInfo, String> {
         .map(|v| v == "Yes" || v == "1")
         .unwrap_or(false);
 
-    let cycle_count = get_ioreg_value(&stdout, "\"CycleCount\"")
-        .and_then(|v| v.parse::<u32>().ok());
+    let cycle_count =
+        get_ioreg_value(&stdout, "\"CycleCount\"").and_then(|v| v.parse::<u32>().ok());
 
     let temperature = get_ioreg_value(&stdout, "\"Temperature\"")
         .and_then(|v| v.parse::<f32>().ok())
@@ -141,9 +141,13 @@ pub fn get_battery_info() -> Result<BatteryInfo, String> {
 }
 
 #[tauri::command]
+#[allow(deprecated)]
 pub async fn open_energy_settings(app: AppHandle) -> Result<(), String> {
     app.shell()
-        .open("x-apple.systempreferences:com.apple.preference.battery", None)
+        .open(
+            "x-apple.systempreferences:com.apple.preference.battery",
+            None,
+        )
         .map_err(|e| e.to_string())
 }
 
@@ -158,7 +162,9 @@ mod tests {
         match result {
             Ok(info) => {
                 assert!(info.percentage >= 0.0 && info.percentage <= 100.0);
-                assert!(info.max_capacity_percentage >= 0.0 && info.max_capacity_percentage <= 150.0);
+                assert!(
+                    info.max_capacity_percentage >= 0.0 && info.max_capacity_percentage <= 150.0
+                );
                 assert!(["Normal", "Service Recommended", "Replace Soon"]
                     .contains(&info.condition.as_str()));
             }

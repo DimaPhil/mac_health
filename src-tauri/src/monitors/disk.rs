@@ -161,7 +161,11 @@ fn calculate_categories() -> StorageCategories {
     let home = dirs::home_dir().unwrap_or_default();
 
     let dirs_to_scan: Vec<(&str, std::path::PathBuf, &str)> = vec![
-        ("Applications", std::path::PathBuf::from("/Applications"), "#3b82f6"),
+        (
+            "Applications",
+            std::path::PathBuf::from("/Applications"),
+            "#3b82f6",
+        ),
         ("Documents", home.join("Documents"), "#22c55e"),
         ("Downloads", home.join("Downloads"), "#14b8a6"),
         ("Pictures", home.join("Pictures"), "#f59e0b"),
@@ -184,10 +188,8 @@ fn calculate_categories() -> StorageCategories {
         })
         .collect();
 
-    let categories: Vec<StorageCategory> = handles
-        .into_iter()
-        .filter_map(|h| h.join().ok())
-        .collect();
+    let categories: Vec<StorageCategory> =
+        handles.into_iter().filter_map(|h| h.join().ok()).collect();
 
     let total_categorized = categories.iter().map(|c| c.bytes).sum();
 
@@ -242,6 +244,7 @@ pub fn refresh_storage_categories() -> Result<StorageCategories, String> {
 }
 
 #[tauri::command]
+#[allow(deprecated)]
 pub async fn open_storage_settings(app: AppHandle) -> Result<(), String> {
     app.shell()
         .open("x-apple.systempreferences:com.apple.settings.Storage", None)
@@ -249,6 +252,7 @@ pub async fn open_storage_settings(app: AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
+#[allow(deprecated)]
 pub async fn open_system_settings(app: AppHandle, panel: String) -> Result<(), String> {
     let url = match panel.as_str() {
         "storage" => "x-apple.systempreferences:com.apple.settings.Storage",

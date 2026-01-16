@@ -93,7 +93,7 @@ pub fn get_top_memory_processes(count: Option<usize>) -> Result<Vec<ProcessMemor
                 // Extract just the executable name from the path
                 let name = full_path
                     .split('/')
-                    .last()
+                    .next_back()
                     .unwrap_or(&full_path)
                     .split(' ')
                     .next()

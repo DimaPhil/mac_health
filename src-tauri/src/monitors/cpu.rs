@@ -30,9 +30,8 @@ pub struct ProcessCpuInfo {
 #[tauri::command]
 pub fn get_cpu_info() -> Result<CpuInfo, String> {
     // Get CPU count and model
-    let mut sys = System::new_with_specifics(
-        RefreshKind::nothing().with_cpu(CpuRefreshKind::everything()),
-    );
+    let mut sys =
+        System::new_with_specifics(RefreshKind::nothing().with_cpu(CpuRefreshKind::everything()));
     sys.refresh_cpu_all();
 
     let cpus = sys.cpus();
@@ -59,7 +58,7 @@ pub fn get_cpu_info() -> Result<CpuInfo, String> {
             // Use total CPU percentage as base, add variation per core
             let base = total_usage_percentage * 0.7;
             let variation = (((i as f32) * 1.5).sin().abs() * 25.0) + 10.0;
-            (base + variation).min(100.0).max(8.0) // Ensure minimum visibility
+            (base + variation).clamp(8.0, 100.0) // Ensure minimum visibility
         })
         .collect();
 
@@ -93,7 +92,11 @@ fn get_cpu_usage_from_top() -> Option<f32> {
                 let words: Vec<&str> = before_idle.split_whitespace().collect();
                 // Last word before "idle" should be the idle percentage
                 if let Some(idle_pct_word) = words.last() {
-                    if let Ok(idle) = idle_pct_word.trim_end_matches('%').trim_end_matches(',').parse::<f32>() {
+                    if let Ok(idle) = idle_pct_word
+                        .trim_end_matches('%')
+                        .trim_end_matches(',')
+                        .parse::<f32>()
+                    {
                         return Some(100.0 - idle);
                     }
                 }
@@ -152,12 +155,10 @@ pub fn get_system_uptime() -> u64 {
 }
 
 #[tauri::command]
+#[allow(deprecated)]
 pub async fn open_activity_monitor(app: AppHandle) -> Result<(), String> {
     app.shell()
-        .open(
-            "/System/Applications/Utilities/Activity Monitor.app",
-            None,
-        )
+        .open("/System/Applications/Utilities/Activity Monitor.app", None)
         .map_err(|e| e.to_string())
 }
 
