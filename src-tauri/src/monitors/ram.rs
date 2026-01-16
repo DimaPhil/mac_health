@@ -29,13 +29,9 @@ pub fn get_ram_info() -> Result<RamInfo, String> {
 
     let total = sys.total_memory();
     let used = sys.used_memory();
-    // available_memory() can return 0 on macOS, calculate from total - used
-    let available = sys.available_memory();
-    let available = if available == 0 {
-        total.saturating_sub(used)
-    } else {
-        available
-    };
+    // Always calculate available as total - used for UI consistency
+    // (macOS available_memory() returns only truly free memory, excluding cached files)
+    let available = total.saturating_sub(used);
 
     let used_percentage = if total > 0 {
         (used as f32 / total as f32) * 100.0
